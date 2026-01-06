@@ -1,0 +1,341 @@
+,description,categories
+0,Achat de courses,Nourriture
+1,Courses au supermarché,Nourriture
+2,Légumes frais,Nourriture
+3,Viande et poisson,Nourriture
+4,Dîner au restaurant,Nourriture
+5,Buffet du déjeuner,Nourriture
+6,Repas fast-food,Nourriture
+7,Livraison de pizza,Nourriture
+8,Petit-déjeuner au café,Nourriture
+9,Café,Nourriture
+10,Produits de boulangerie,Nourriture
+11,Glace,Nourriture
+12,Snacks,Nourriture
+13,Repas dans la food court,Nourriture
+14,Plat à emporter,Nourriture
+15,Facture de restaurant,Nourriture
+16,Épicerie,Nourriture
+17,Fruits et légumes,Nourriture
+18,Produits laitiers,Nourriture
+19,Courses hebdomadaires,Nourriture
+20,Produits alimentaires,Nourriture
+21,Dîner à l'extérieur,Nourriture
+22,Repas à l'hôtel,Nourriture
+23,Service traiteur,Nourriture
+24,Livraison de repas,Nourriture
+25,Ingrédients de cuisine,Nourriture
+26,Épices et condiments,Nourriture
+27,Achat de boissons,Nourriture
+28,Boutique de desserts,Nourriture
+29,Street food,Nourriture
+30,Poulet biryani,Nourriture
+31,Riz frit,Nourriture
+32,Kottu roti,Nourriture
+33,Dosa et idli,Nourriture
+34,Sandwicherie,Nourriture
+35,Supermarché Cargills,Nourriture
+36,Supermarché Keells,Nourriture
+37,Supermarché Arpico,Nourriture
+38,Magasin bio,Nourriture
+39,Marché de légumes,Nourriture
+40,Marché aux poissons,Nourriture
+41,Boucherie,Nourriture
+42,Repas dans un food hall,Nourriture
+43,Buffet restaurant,Nourriture
+44,Repas au café,Nourriture
+45,Bar à salade,Nourriture
+46,Petit-déjeuner buffet,Nourriture
+47,Tacos à emporter,Nourriture
+48,Crêperie,Nourriture
+49,Café gourmand,Nourriture
+50,Smoothie frais,Nourriture
+51,Bar à sushis,Nourriture
+52,Plats végétariens,Nourriture
+53,Pâtisserie artisanale,Nourriture
+54,Sandwich fait maison,Nourriture
+55,Commande de brunch,Nourriture
+56,Achat de produits surgelés,Nourriture
+57,Dîner familial,Nourriture
+58,Achat de snacks sucrés,Nourriture
+59,Achat de boissons chaudes,Nourriture
+60,Course Uber,Transport
+61,Course de taxi,Transport
+62,Ticket de bus,Transport
+63,Billet de train,Transport
+64,Carte de métro,Transport
+65,Station-service,Transport
+66,Carburant voiture,Transport
+67,Recharge d'essence,Transport
+68,Diesel,Transport
+69,Carburant véhicule,Transport
+70,Auto rickshaw,Transport
+71,Service de taxi,Transport
+72,Transport public,Transport
+73,Abonnement ferroviaire,Transport
+74,Navette aéroport,Transport
+75,Frais de parking,Transport
+76,Péages,Transport
+77,Entretien véhicule,Transport
+78,Lavage voiture,Transport
+79,Réparation vélo,Transport
+80,Coût transport,Transport
+81,Frais de trajet,Transport
+82,Pass de bus,Transport
+83,Transport mensuel,Transport
+84,Covoiturage,Transport
+85,Tricycle motorisé,Transport
+86,Bus longue distance,Transport
+87,Train express,Transport
+88,Réservation vol,Transport
+89,Frais de voyage,Transport
+90,Course tuk-tuk,Transport
+91,Bus CTB,Transport
+92,Abonnement train saison,Transport
+93,Péage autoroutier,Transport
+94,Service véhicule,Transport
+95,Taxi longue distance,Transport
+96,Location de voiture,Transport
+97,Billet de tram,Transport
+98,Carburant moto,Transport
+99,Frais de transport scolaire,Transport
+100,Navette entreprise,Transport
+101,Trajet en ferry,Transport
+102,Location scooter,Transport
+103,Frais de parking longue durée,Transport
+104,Billet de métro touristique,Transport
+105,Facture d'électricité,Factures
+106,Facture d'eau,Factures
+107,Facture Internet,Factures
+108,Facture mobile,Factures
+109,Recharge téléphone,Factures
+110,Paiement haut débit,Factures
+111,Télévision par câble,Factures
+112,Facture de services,Factures
+113,Loyer mensuel,Factures
+114,Loyer maison,Factures
+115,Loyer appartement,Factures
+116,Paiement location,Factures
+117,Gaz en bouteille,Factures
+118,Recharge GPL,Factures
+119,Paiement électricité,Factures
+120,Frais d'eau,Factures
+121,Facture téléphone,Factures
+122,Facture postpayée,Factures
+123,Abonnement WiFi,Factures
+124,Recharge DTH,Factures
+125,Charges de maintenance,Factures
+126,Frais de copropriété,Factures
+127,Taxe foncière,Factures
+128,Taxe municipale,Factures
+129,Frais d'égout,Factures
+130,Charges communes,Factures
+131,Facture puissance,Factures
+132,Facture énergie,Factures
+133,Facture ligne fixe,Factures
+134,Facture haut débit,Factures
+135,Abonnement TV,Factures
+136,Paiement utilité,Factures
+137,Cotisations mensuelles,Factures
+138,Frais de service,Factures
+139,Entretien bâtiment,Factures
+140,Facture CEB,Factures
+141,Facture water board,Factures
+142,Facture Dialog mobile,Factures
+143,Facture SLT fiber,Factures
+144,Entretien appartement,Factures
+145,Facture chauffage,Factures
+146,Frais de gestion copropriété,Factures
+147,Abonnement électricité prépayée,Factures
+148,Facture gaz naturel,Factures
+149,Frais Internet professionnel,Factures
+150,Facture téléphonique entreprise,Factures
+151,Facture eau chaude,Factures
+152,Facture sécurité domestique,Factures
+153,Paiement assurance habitation,Factures
+154,Abonnement câble premium,Factures
+155,Abonnement Netflix,Divertissement
+156,Amazon Prime,Divertissement
+157,Spotify premium,Divertissement
+158,YouTube premium,Divertissement
+159,Billets de cinéma,Divertissement
+160,Salle de cinéma,Divertissement
+161,Billets de concert,Divertissement
+162,Pass événement,Divertissement
+163,Abonnement gaming,Divertissement
+164,PlayStation Plus,Divertissement
+165,Xbox Game Pass,Divertissement
+166,Jeu Steam,Divertissement
+167,Entrée parc à thème,Divertissement
+168,Parc d'attractions,Divertissement
+169,Billet musée,Divertissement
+170,Entrée zoo,Divertissement
+171,Événement sportif,Divertissement
+172,Match de cricket,Divertissement
+173,Match de football,Divertissement
+174,Spectacle théâtre,Divertissement
+175,Festival de musique,Divertissement
+176,Exposition artistique,Divertissement
+177,Frais divertissement,Divertissement
+178,Cours hobby,Divertissement
+179,Activité fun,Divertissement
+180,Service de streaming,Divertissement
+181,Disney Plus,Divertissement
+182,HBO Max,Divertissement
+183,Jeu vidéo,Divertissement
+184,Frais récréation,Divertissement
+185,Billet parc aquatique,Divertissement
+186,Abonnement cartoon,Divertissement
+187,Billet théâtre musical,Divertissement
+188,Concert privé,Divertissement
+189,Frais d'escape game,Divertissement
+190,Sortie cinéma enfants,Divertissement
+191,Billet opéras,Divertissement
+192,Abonnement magazine numérique,Divertissement
+193,Billet festival local,Divertissement
+194,Frais karaoké,Divertissement
+195,Courses vêtements,Achats
+196,Nouvelle chemise,Achats
+197,Achat chaussures,Achats
+198,Achat robe,Achats
+199,Shopping en ligne,Achats
+200,Commande Amazon,Achats
+201,Commande Flipkart,Achats
+202,Magasin électronique,Achats
+203,Téléphone portable,Achats
+204,Achat ordinateur portable,Achats
+205,Casque audio,Achats
+206,Accessoires,Achats
+207,Achat meubles,Achats
+208,Décoration maison,Achats
+209,Articles cuisine,Achats
+210,Appareils électroménagers,Achats
+211,Livres et papeterie,Achats
+212,Articles cadeaux,Achats
+213,Cosmétiques,Achats
+214,Produits soin personnel,Achats
+215,Achat bijoux,Achats
+216,Achat montre,Achats
+217,Sac et bagages,Achats
+218,Matériel sport,Achats
+219,Magasin jouets,Achats
+220,Accessoires mode,Achats
+221,Gadget électronique,Achats
+222,Electroménager maison,Achats
+223,Fournitures bureau,Achats
+224,Vêtements designer,Achats
+225,Achat sac à main,Achats
+226,Achat lunettes,Achats
+227,Vêtements enfants,Achats
+228,Achat accessoires cheveux,Achats
+229,Achat parfum,Achats
+230,Achat montre connectée,Achats
+231,Achat chaussures sport,Achats
+232,Achat outils bricolage,Achats
+233,Achat décoration bureau,Achats
+234,Achat lampe design,Achats
+235,Consultation médecin,Santé
+236,Bilan médical,Santé
+237,Tests de laboratoire,Santé
+238,Analyse sanguine,Santé
+239,Facture pharmacie,Santé
+240,Achat médicaments,Santé
+241,Médicaments sur ordonnance,Santé
+242,Compléments santé,Santé
+243,Facture hôpital,Santé
+244,Visite clinique,Santé
+245,Consultation dentaire,Santé
+246,Examen de la vue,Santé
+247,Physiothérapie,Santé
+248,Assurance médicale,Santé
+249,Prime assurance santé,Santé
+250,Vaccination,Santé
+251,Radiographie,Santé
+252,Scanner CT,Santé
+253,IRM,Santé
+254,Procédure médicale,Santé
+255,Coût chirurgie,Santé
+256,Admission hôpital,Santé
+257,Traitement urgence,Santé
+258,Premiers soins,Santé
+259,Coût soins santé,Santé
+260,Honoraires médecin,Santé
+261,Frais hôpital,Santé
+262,Traitement dentaire,Santé
+263,Soins yeux,Santé
+264,Bilan santé,Santé
+265,Médicaments pharmacie,Santé
+266,Coût ordonnance,Santé
+267,Test médical,Santé
+268,Dépistage santé,Santé
+269,Frais clinique,Santé
+270,Consultation nutrition,Santé
+271,Frais kinésithérapie,Santé
+272,Vaccin annuel,Santé
+273,Bilans sanguins complets,Santé
+274,Consultation dermatologie,Santé
+275,Traitement physiologique,Santé
+276,Séance ostéopathie,Santé
+277,Séance acupuncture,Santé
+278,Achat inhalateurs,Santé
+279,Test audiométrique,Santé
+280,Frais scolaire,Éducation
+281,Frais université,Éducation
+282,Inscription cours,Éducation
+283,Cours en ligne,Éducation
+284,Cours Udemy,Éducation
+285,Abonnement Coursera,Éducation
+286,Livres et notes,Éducation
+287,Matériel étude,Éducation
+288,Frais examen,Éducation
+289,Certification,Éducation
+290,Inscription atelier,Éducation
+291,Frais séminaire,Éducation
+292,Programme formation,Éducation
+293,Frais éducation,Éducation
+294,Plateforme apprentissage,Éducation
+295,Frais université,Éducation
+296,Livres académiques,Éducation
+297,Cours tutoriels,Éducation
+298,Cours langue,Éducation
+299,Développement compétences,Éducation
+300,Formation professionnelle,Éducation
+301,Cours métier,Éducation
+302,Programme diplôme,Éducation
+303,Cours diplôme,Éducation
+304,Matériel éducatif,Éducation
+305,Cours sciences,Éducation
+306,Abonnement plateforme étude,Éducation
+307,Frais laboratoire,Éducation
+308,Cours spécialisation,Éducation
+309,Frais bibliothèque,Éducation
+310,Dépenses diverses,Divers
+311,Achat aléatoire,Divers
+312,Don caritatif,Divers
+313,Offrir cadeau,Divers
+314,Nourriture animal,Divers
+315,Soins animaux,Divers
+316,Visite salon,Divers
+317,Coupe de cheveux,Divers
+318,Service blanchisserie,Divers
+319,Nettoyage à sec,Divers
+320,Photographie,Divers
+321,Service impression,Divers
+322,Frais courrier,Divers
+323,Postage,Divers
+324,Dépense générale,Divers
+325,Salon beauté,Divers
+326,Soin spa,Divers
+327,Service soin,Divers
+328,Fournitures animaux,Divers
+329,Matériel hobby,Divers
+330,Fournitures artisanat,Divers
+331,Soin personnel,Divers
+332,Bien-être,Divers
+333,Auto-soin,Divers
+334,Cours de yoga,Divers
+335,Frais coiffeur maison,Divers
+336,Atelier créatif,Divers
+337,Service jardinage,Divers
+338,Soin des plantes,Divers
+339,Dépense imprévue,Divers

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Gradient Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>CSS Gradient Generator</h1>
+        <div class="controls">
+            <label for="gradient-type">Type:</label>
+            <select id="gradient-type">
+                <option value="linear">Linear</option>
+                <option value="radial">Radial</option>
+            </select>
+
+            <label for="direction">Direction:</label>
+            <select id="direction">
+                <option value="to right">To Right</option>
+                <option value="to left">To Left</option>
+                <option value="to bottom">To Bottom</option>
+                <option value="to top">To Top</option>
+                <option value="45deg">45°</option>
+                <option value="135deg">135°</option>
+            </select>
+
+            <label for="color1">Color 1:</label>
+            <input type="color" id="color1" value="#ff0000">
+
+            <label for="color2">Color 2:</label>
+            <input type="color" id="color2" value="#0000ff">
+
+            <button id="add-color">Add Color</button>
+        </div>
+
+        <div class="preview">
+            <div id="gradient-preview"></div>
+        </div>
+
+        <div class="css-output">
+            <h2>Generated CSS</h2>
+            <textarea id="css-code" readonly></textarea>
+            <button id="export-btn">Export CSS</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
