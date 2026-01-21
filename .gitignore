@@ -2,4 +2,4 @@ env/
 .env
 **/node_modules/
 **/venv/
-**/frontend/src/app/config/
+/frontend/src/app/config/
