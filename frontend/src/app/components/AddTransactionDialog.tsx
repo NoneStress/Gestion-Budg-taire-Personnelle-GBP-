@@ -64,7 +64,7 @@ export function AddTransactionDialog({ onAddTransaction }: AddTransactionDialogP
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!description || !amount || !category) {
+    if (!description || !amount) {
       return;
     }
 
@@ -145,7 +145,7 @@ export function AddTransactionDialog({ onAddTransaction }: AddTransactionDialogP
 
           <div className="space-y-2">
             <Label htmlFor="category">Catégorie</Label>
-            <Select value={category} onValueChange={setCategory} required>
+            <Select value={category} onValueChange={setCategory}>
               <SelectTrigger id="category">
                 <SelectValue placeholder="Sélectionner une catégorie" />
               </SelectTrigger>

@@ -1,82 +1,65 @@
-# import easyocr  # Temporarily commented for testing
-import numpy as np
-import re
-import os
+# app/services/ocr_service.py
 from PIL import Image
+import numpy as np
+import easyocr
 from io import BytesIO
+import re
 
+# Initialiser le reader OCR UNE SEULE FOIS (ne pas le faire à chaque appel)
+reader = easyocr.Reader(['fr', 'en'])
 
-# Crée un dossier local pour les modèles dans ton projet
-model_dir = os.path.join(os.path.dirname(__file__), "easyocr_models")
-os.makedirs(model_dir, exist_ok=True)
-
-
-PRICE_PATTERN = r"(.+?)\s+(\d+[.,]\d{2})\s*€?$"
-
-
-def extract_text_from_image(image_bytes: bytes) -> list[str]:
+def extract_text_from_image(image_bytes):
     """
-    Convertit une image en liste de lignes de texte.
-    Mock function for testing - returns sample receipt data
+    Extract text from image bytes using OCR.
+    
+    Args:
+        image_bytes: bytes - Les données binaires de l'image (pas un chemin!)
+    
+    Returns:
+        str - Le texte extrait de l'image
     """
-    # Mock OCR result for testing
-    return [
-        "SUPERMARCHE EXPRESS",
-        "Pain 2.50€",
-        "Lait 1.20€",
-        "Bananes 3.40€",
-        "TOTAL: 7.10€"
-    ]
+    try:
+        # ✅ Convertir les bytes en image PIL
+        # ❌ NE PAS faire: image_bytes.decode('utf-8')
+        image = Image.open(BytesIO(image_bytes))
+        
+        # Convertir en array numpy pour easyocr
+        image_np = np.array(image)
+        
+        # Faire l'OCR
+        results = reader.readtext(image_np)
+        
+        # Extraire le texte
+        extracted_text = ' '.join([text for (_, text, _) in results])
+        
+        return extracted_text
+    
+    except Exception as e:
+        raise Exception(f"Erreur extraction OCR: {str(e)}")
 
 
-# Fonction de separtion des elements de l'image en format article : prix 
-def extract_items(lines: list[str]) -> list[dict]:
+def extract_items(text):
     items = []
 
-    for line in lines:
-        match = re.search(PRICE_PATTERN, line)
-        if match:
-            label = match.group(1).strip()
-            amount = float(match.group(2).replace(",", "."))
+    if not text or len(text.strip()) == 0:
+        return items
 
+    # On peut ignorer les lignes, on scanne tout le texte
+    pattern = r'(\d+)\s+([A-ZÀ-ÿ0-9\s]+?)\s+(\d+[.,]\d{2})'
+    
+    matches = re.findall(pattern, text)
+    
+    for _, description, amount_str in matches:
+        description = description.strip()
+        amount_str = amount_str.replace(',', '.')
+        try:
+            amount = float(amount_str)
             items.append({
-                "label": label,
-                "amount": amount
+                "label": description,
+                "amount": amount,
+                "description": description
             })
+        except ValueError:
+            continue
 
     return items
-
-
-
-# def extract_text_from_image(image_path):
-#     # Initialize OCR reader
-#     reader = easyocr.Reader(['fr', 'en'])  # Support French and English
-#     """Extract text from an image using OCR."""
-#     image = Image.open(image_path)
-#     image_np = np.array(image)
-#     results = reader.readtext(image_np)
-#     extracted_text = ' '.join([text for (_, text, _) in results])
-#     return extracted_text
-
-# def categorize_description(description):
-#     """Categorize the expense description."""
-#     X = vectorizer.transform([description])
-#     pred = model.predict(X)[0]
-#     prob = model.predict_proba(X)[0].max() * 100
-#     return pred, prob
-
-# if __name__ == "__main__":
-#     # Example usage
-#     image_path = input("Enter the path to the image: ")
-#     if os.path.exists(image_path):
-#         text = extract_text_from_image(image_path)
-#         print(f"Extracted Text: {text}")
-#         if text.strip():
-#             category, confidence = categorize_description(text)
-#             print(f"Predicted Category: {category}")
-#             print(f"Confidence: {confidence:.2f}%")
-#         else:
-#             print("No text extracted from the image.")
-#     else:
-#         print("Image path does not exist.")
-

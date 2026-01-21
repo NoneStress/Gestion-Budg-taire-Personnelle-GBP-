@@ -1,9 +1,11 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from dotenv import load_dotenv
+import os
 
-DATABASE_URL = (
-    "postgresql://postgres:Said0000*@localhost:5432/file_rouge"
-)
+load_dotenv()
+
+DATABASE_URL = os.getenv("URL")
 
 engine = create_engine(DATABASE_URL)
 

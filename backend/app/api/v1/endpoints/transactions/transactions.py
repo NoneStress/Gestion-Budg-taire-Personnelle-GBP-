@@ -53,13 +53,75 @@ def get_transactions(
     transactions = query.all()
     return transactions
 
+# ============================================================================
+# ENDPOINT 3: Créer Plusieurs Transactions en Une Fois (NOUVEAU - Optionnel)
+# ============================================================================
+
+@router.post("/transactions/bulk", response_model=List[TransactionResponse])
+def create_bulk_transactions(
+    transactions_data: List[TransactionCreate],
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    ✅ NOUVEAU: Créer plusieurs transactions en une seule requête.
+    
+    Utile quand le frontend envoie toutes les transactions détectées par OCR.
+    Plus efficace que de créer une par une.
+    """
+    created_transactions = []
+    
+    for transaction_data in transactions_data:
+        # Classification automatique si la catégorie n'est pas fournie
+        category = transaction_data.category
+        if not category:
+            try:
+                X = vectorizer.transform([transaction_data.description])
+                predicted_category = model.predict(X)[0]
+                category = predicted_category
+            except Exception as e:
+                category = "Autres"
+                print(f"Erreur lors de la classification automatique: {e}")
+        
+        # Créer la transaction
+        db_transaction = Transaction(
+            user_id=current_user.id,
+            description=transaction_data.description,
+            amount=transaction_data.amount,
+            type=transaction_data.type,
+            category=category,
+            date=transaction_data.date
+        )
+        db.add(db_transaction)
+        created_transactions.append(db_transaction)
+    
+    # Commit toutes les transactions en une fois
+    db.commit()
+    
+    # Refresh toutes les transactions
+    for transaction in created_transactions:
+        db.refresh(transaction)
+    
+    return created_transactions
+
+# ============================================================================
+# ENDPOINT 2: Création de Transaction (AMÉLIORÉ pour éviter doublons)
+# ============================================================================
+
 @router.post("/transactions", response_model=TransactionResponse)
 def create_transaction(
     transaction_data: TransactionCreate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    """Ajouter une nouvelle transaction"""
+    """
+    Créer une nouvelle transaction.
+    
+    ✅ AMÉLIORATION: 
+    - Si ticket_id fourni, crée seulement la transaction principale
+    - Ne crée PAS automatiquement les autres items (évite doublons)
+    - L'utilisateur peut créer les autres manuellement depuis le frontend
+    """
     
     # Classification automatique si la catégorie n'est pas fournie
     category = transaction_data.category
@@ -71,7 +133,7 @@ def create_transaction(
             category = predicted_category
         except Exception as e:
             # En cas d'erreur de classification, utiliser une catégorie par défaut
-            category = "Autre"
+            category = "Autres"
             print(f"Erreur lors de la classification automatique: {e}")
     
     # Créer la transaction principale
@@ -91,65 +153,81 @@ def create_transaction(
     if transaction_data.tickets:
         for ticket_data in transaction_data.tickets:
             if ticket_data.ticket_id:
-                # Utiliser un ticket déjà traité avec OCR
+                # ✅ Utiliser un ticket déjà traité avec OCR
                 existing_ticket = db.query(Ticket).filter(
                     Ticket.id == ticket_data.ticket_id,
-                    Ticket.user_id == current_user.id,  # ✅ Vérifier que le ticket appartient à l'utilisateur
-                    Ticket.transaction_id.is_(None)  # Ticket pas encore associé à une transaction
+                    Ticket.user_id == current_user.id,
+                    Ticket.transaction_id.is_(None)  # Ticket pas encore associé
                 ).first()
                 
                 if not existing_ticket:
-                    raise HTTPException(status_code=404, detail=f"Ticket {ticket_data.ticket_id} non trouvé ou déjà utilisé")
+                    raise HTTPException(
+                        status_code=404, 
+                        detail=f"Ticket {ticket_data.ticket_id} non trouvé ou déjà utilisé"
+                    )
                 
-                # Mettre à jour le ticket pour l'associer à la transaction
+                # ✅ Mettre à jour le ticket pour l'associer à la transaction
                 existing_ticket.transaction_id = db_transaction.id
-                db.commit()
                 
-                # Récupérer les données extraites stockées dans la colonne data
+                # ✅ OPTION 1: Ne PAS créer automatiquement les autres items
+                # (Recommandé pour éviter les doublons)
+                # L'utilisateur créera les autres transactions manuellement depuis le frontend
+                
+                # ✅ OPTION 2: Créer automatiquement les autres items (si vous le souhaitez)
+                # Décommentez le code ci-dessous si vous voulez cette fonctionnalité
+                """
                 try:
                     ticket_info = json.loads(existing_ticket.data)
-                    raw_text = ticket_info.get("raw_text", [])
                     items = ticket_info.get("items", [])
+                    processed_items = ticket_info.get("processed_items", [])
                     
-                    # Traiter les items extraits
-                    for item in items:
-                        # Classifier automatiquement la catégorie
-                        X = vectorizer.transform([item["label"]])
-                        predicted_category = model.predict(X)[0]
-                        
-                        # Créer une transaction pour cet item
-                        auto_transaction = Transaction(
-                            user_id=current_user.id,
-                            description=f"Auto-detected: {item['label']}",
-                            amount=item["amount"],
-                            type="expense",
-                            category=predicted_category,
-                            date=transaction_data.date
-                        )
-                        db.add(auto_transaction)
-                        db.commit()
-                        db.refresh(auto_transaction)
-                        
-                        # Créer un lien avec le ticket original
-                        auto_ticket = Ticket(
-                            user_id=current_user.id,  # ✅ Lier l'auto-ticket à l'utilisateur
-                            transaction_id=auto_transaction.id,
-                            type=existing_ticket.type,
-                            file_path=f"auto_from_ticket_{existing_ticket.id}",
-                            size=existing_ticket.size
-                        )
-                        db.add(auto_ticket)
+                    # Créer une transaction pour chaque item non traité
+                    for index, item in enumerate(items):
+                        if index not in processed_items:
+                            # Classifier automatiquement la catégorie
+                            X = vectorizer.transform([item["label"]])
+                            predicted_category = model.predict(X)[0]
+                            
+                            # Créer une transaction pour cet item
+                            auto_transaction = Transaction(
+                                user_id=current_user.id,
+                                description=item["label"],
+                                amount=item["amount"],
+                                type="expense",
+                                category=predicted_category,
+                                date=transaction_data.date
+                            )
+                            db.add(auto_transaction)
+                            db.commit()
+                            db.refresh(auto_transaction)
+                            
+                            # Marquer l'item comme traité
+                            processed_items.append(index)
+                            
+                            # Créer un lien avec le ticket original
+                            auto_ticket = Ticket(
+                                user_id=current_user.id,
+                                transaction_id=auto_transaction.id,
+                                type=existing_ticket.type,
+                                file_path=f"auto_from_ticket_{existing_ticket.id}",
+                                size=existing_ticket.size
+                            )
+                            db.add(auto_ticket)
                     
-                    db.commit()
+                    # Mettre à jour le ticket avec la liste des items traités
+                    ticket_info["processed_items"] = processed_items
+                    existing_ticket.data = json.dumps(ticket_info)
                     
                 except (json.JSONDecodeError, KeyError) as e:
                     print(f"Erreur lors du traitement des données du ticket: {e}")
-                    continue
+                """
+                
+                db.commit()
                     
             else:
                 # Créer un nouveau ticket (sans OCR)
                 db_ticket = Ticket(
-                    user_id=current_user.id,  # ✅ Lier le ticket à l'utilisateur
+                    user_id=current_user.id,
                     transaction_id=db_transaction.id,
                     type=ticket_data.type,
                     file_path=ticket_data.file_path,
@@ -159,6 +237,7 @@ def create_transaction(
                 db.commit()
 
     return db_transaction
+
 
 @router.put("/transactions/{transaction_id}", response_model=TransactionResponse)
 def update_transaction(
@@ -296,4 +375,102 @@ def process_ticket_with_ocr(
         status_code=501, 
         detail="Traitement OCR pour tickets existants nécessite l'accès aux données du fichier. Utilisez le POST transaction avec les données du fichier."
     )
+
+@router.post("/transactions/bulk", response_model=List[TransactionResponse])
+def create_bulk_transactions(
+    transactions_data: List[TransactionCreate],
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    ✅ NOUVEAU: Créer plusieurs transactions en une seule requête.
+    
+    Utile quand le frontend envoie toutes les transactions détectées par OCR.
+    Plus efficace que de créer une par une.
+    """
+    created_transactions = []
+    
+    for transaction_data in transactions_data:
+        # Classification automatique si la catégorie n'est pas fournie
+        category = transaction_data.category
+        if not category:
+            try:
+                X = vectorizer.transform([transaction_data.description])
+                predicted_category = model.predict(X)[0]
+                category = predicted_category
+            except Exception as e:
+                category = "Autres"
+                print(f"Erreur lors de la classification automatique: {e}")
+        
+        # Créer la transaction
+        db_transaction = Transaction(
+            user_id=current_user.id,
+            description=transaction_data.description,
+            amount=transaction_data.amount,
+            type=transaction_data.type,
+            category=category,
+            date=transaction_data.date
+        )
+        db.add(db_transaction)
+        created_transactions.append(db_transaction)
+    
+    # Commit toutes les transactions en une fois
+    db.commit()
+    
+    # Refresh toutes les transactions
+    for transaction in created_transactions:
+        db.refresh(transaction)
+    
+    return created_transactions
+
+
+# ============================================================================
+# ENDPOINT 4: Récupérer les Items d'un Ticket (NOUVEAU - Optionnel)
+# ============================================================================
+
+@router.get("/tickets/{ticket_id}/items")
+def get_ticket_items(
+    ticket_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    ✅ NOUVEAU: Récupérer les items d'un ticket OCR.
+    
+    Utile pour réafficher les items si l'utilisateur veut les recréer.
+    """
+    ticket = db.query(Ticket).filter(
+        Ticket.id == ticket_id,
+        Ticket.user_id == current_user.id
+    ).first()
+    
+    if not ticket:
+        raise HTTPException(status_code=404, detail="Ticket non trouvé")
+    
+    try:
+        ticket_info = json.loads(ticket.data)
+        items = ticket_info.get("items", [])
+        processed_items = ticket_info.get("processed_items", [])
+        
+        # Retourner les items avec leur statut (traité ou non)
+        items_with_status = []
+        for index, item in enumerate(items):
+            items_with_status.append({
+                **item,
+                "index": index,
+                "processed": index in processed_items
+            })
+        
+        return {
+            "ticket_id": ticket_id,
+            "items": items_with_status,
+            "total_items": len(items),
+            "processed_count": len(processed_items),
+            "remaining_count": len(items) - len(processed_items)
+        }
+    except (json.JSONDecodeError, KeyError) as e:
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Erreur lors de la lecture des données du ticket: {str(e)}"
+        )
 

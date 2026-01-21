@@ -1,9 +1,0 @@
-fastapi==0.128.0
-uvicorn[standard]
-sqlalchemy
-alembic
-psycopg2-binary  # ou sqlite3 pour dev
-python-jose[cryptography]
-passlib[bcrypt]
-python-multipart
-pydantic[email]

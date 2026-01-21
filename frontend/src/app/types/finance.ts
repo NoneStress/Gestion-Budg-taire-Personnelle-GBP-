@@ -25,16 +25,17 @@ export interface CategoryData {
 }
 
 export const EXPENSE_CATEGORIES = [
-  'Alimentation',
-  'Transport',
-  'Logement',
-  'Loisirs',
-  'Santé',
-  'Éducation',
-  'Shopping',
-  'Factures',
-  'Autres',
+'Nourriture',
+'Transport',
+'Factures',
+'Divertissement',
+'Achats',
+'Santé',
+'Éducation',
+'Divers'
 ];
+
+
 
 export const INCOME_CATEGORIES = [
   'Salaire',

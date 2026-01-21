@@ -125,6 +125,27 @@ export interface CategoriesResponse {
   income: string[];
 }
 
+// ============= OCR Types =============
+
+// Format d'un item extrait par l'OCR (correspond au format backend)
+export interface OCRItem {
+  label: string;      // Description de l'item (ex: "Pain", "Essence")
+  amount: number;     // Montant de l'item
+}
+
+// Réponse complète de l'endpoint /process_ticket
+export interface OCRPredictionResponse {
+  ticket_id: number;           // ID du ticket stocké en base
+  raw_text: string[];          // Texte brut extrait (lignes)
+  items: OCRItem[];            // Items extraits avec label et amount
+  message: string;             // Message de confirmation
+  
+  // Champs optionnels pour compatibilité avec ancien format
+  predicted_category?: string; // Catégorie prédite (si un seul item)
+  description?: string;        // Description (si un seul item)
+  amount?: number;             // Montant (si un seul item)
+}
+
 // ============= Local Types (for UI) =============
 export interface Transaction {
   id: string;

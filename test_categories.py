@@ -7,7 +7,7 @@ import os
 sys.path.insert(0, r'c:\Users\lenovo\Desktop\file_rouge_new')
 
 from fastapi.testclient import TestClient
-from projects.app.main import app
+from backend.app.main import app
 
 client = TestClient(app)
 

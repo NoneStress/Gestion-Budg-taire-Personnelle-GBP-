@@ -11,45 +11,26 @@ import json
 
 router = APIRouter()
 
-router = APIRouter()
-
-# @router.get("/")
-# def ocr_check():
-#     return {"status": "ocr endpoint"}
-
-# @router.post("/extract_text/image")
-# async def extract_receipt_from_image(file: UploadFile = File(...)):
-#     if not file.content_type.startswith("image/"):
-#         raise HTTPException(status_code=400, detail="Format non supporté")
-    
-#     image_bytes = await file.read()
-
-#     raw_text = extract_text_from_image(image_bytes)
-#     cleaned_text = clean_receipt_lines(raw_text)
-#     items = extract_items(cleaned_text)
-
-#     return {"items" : items, 
-            # "count" : len(items)}
-
-# @router.post("/extract_raw_text/image")
-# async def extract_raw_text_from_image(file: UploadFile = File(...)):
-#     """Extrait uniquement le texte brut d'une image pour utilisation dans transactions"""
-#     if not file.content_type.startswith("image/"):
-#         raise HTTPException(status_code=400, detail="Format non supporté")
-    
-#     image_bytes = await file.read()
-
-#     raw_text = extract_text_from_image(image_bytes)
-
-#     return {"raw_text": raw_text}
-
 @router.post("/process_ticket")
 async def process_and_store_ticket(
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    """Traite une image avec OCR et stocke les données extraites dans la table ticket"""
+    """
+    Traite une image avec OCR et stocke les données extraites.
+    
+    Retourne:
+    {
+        "ticket_id": 123,
+        "raw_text": ["ligne1", "ligne2", ...],
+        "items": [
+            {"label": "Pain", "amount": 2.50},
+            {"label": "Essence", "amount": 45.00}
+        ],
+        "message": "Ticket traité et stocké avec succès"
+    }
+    """
     if not file.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="Format non supporté")
     
@@ -64,19 +45,28 @@ async def process_and_store_ticket(
         # cleaned_text = clean_receipt_lines(raw_text)
         
         # Extraire les items
-        # items = extract_items(cleaned_text)
+        items = extract_items(raw_text)
+        
+        # ✅ AMÉLIORATION: Formater les items pour correspondre au frontend
+        formatted_items = []
+        for item in items:
+            formatted_items.append({
+                "label": item.get("label", item.get("description", "")),
+                "amount": float(item.get("amount", 0))
+            })
         
         # Stocker dans la table ticket avec les données extraites
         db_ticket = Ticket(
-            user_id=current_user.id,  # ✅ Lier le ticket à l'utilisateur
-            transaction_id=None,  # Sera défini lors de la création de la transaction
+            user_id=current_user.id,
+            transaction_id=None,  # Sera défini lors de la création de transaction
             type=file.content_type,
             file_path=f"processed_{file.filename}",
             data=json.dumps({
                 "raw_text": raw_text,
-                # "items": items,
+                "items": formatted_items,  # ✅ Format standardisé
                 "filename": file.filename,
-                "processed": True  # Marqueur pour identifier les tickets traités
+                "processed": True,
+                "processed_items": []  # ✅ Nouveau: liste des items déjà traités
             }),
             size=len(image_bytes)
         )
@@ -85,11 +75,11 @@ async def process_and_store_ticket(
         db.commit()
         db.refresh(db_ticket)
         
+        # ✅ Retourner le format attendu par le frontend
         return {
             "ticket_id": db_ticket.id,
             "raw_text": raw_text,
-            # "items": items,
-            # "count": len(items),
+            "items": formatted_items,  # ✅ Format: [{"label": "...", "amount": ...}]
             "message": "Ticket traité et stocké avec succès"
         }
         
@@ -97,11 +87,9 @@ async def process_and_store_ticket(
         raise HTTPException(status_code=500, detail=f"Erreur lors du traitement OCR: {str(e)}")
 
 
+
 # HTML CSS pour le frontend avec quelques outils de generation
 # Pytest pour quelques tests unitaire
 # Github action optionnel
 # DOCKER contenaire
 # Creer des visuels avec PowerBI ou Python
-
-
-

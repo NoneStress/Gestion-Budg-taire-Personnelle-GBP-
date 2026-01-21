@@ -15,6 +15,7 @@ import {
   CategoryAnalysis,
   CategoriesResponse,
   TransactionType,
+  OCRPredictionResponse
 } from '../types/api';
 
 class ApiService {
@@ -202,7 +203,7 @@ class ApiService {
   }
 
   // ============= OCR =============
-  async processTicket(file: File): Promise<void> {
+  async processTicket(file: File): Promise<OCRPredictionResponse> {
     const formData = new FormData();
     formData.append('file', file);
 
@@ -214,7 +215,7 @@ class ApiService {
       },
       body: formData,
     });
-    await this.handleResponse(response);
+    return this.handleResponse<OCRPredictionResponse>(response);
   }
 }
 
