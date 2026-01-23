@@ -3,3 +3,6 @@ env/
 **/node_modules/
 **/venv/
 /frontend/src/app/config/
+.env.local
+/standalone_apps
+.dockerignore

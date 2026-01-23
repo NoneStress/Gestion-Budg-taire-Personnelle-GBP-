@@ -11,15 +11,17 @@ class CategoriesResponse(BaseModel):
 
 # Catégories statiques (basées sur les constantes du front-end)
 EXPENSE_CATEGORIES = [
-    "Alimentation",
-    "Transport",
-    "Logement",
-    "Santé",
-    "Éducation",
-    "Divertissement",
-    "Shopping",
-    "Autres"
+    "Nourriture"
+    "Transport"
+    "Factures"
+    "Divertissement"
+    "Achats"
+    "Santé"
+    "Éducation"
+    "Divers"
 ]
+
+
 
 INCOME_CATEGORIES = [
     "Salaire",

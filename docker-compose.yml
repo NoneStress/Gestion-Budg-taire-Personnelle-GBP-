@@ -1,0 +1,76 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: file_rouge_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Said0000*
+      POSTGRES_DB: file_rouge
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: file-rouge-backend:latest
+    container_name: file_rouge_backend
+    env_file: .env
+    environment:
+      # ✅ Les valeurs doivent être définies explicitement
+      DATABASE_URL: ${DATABASE_URL}
+      MODEL_PATH: ${MODEL_PATH}
+    ports:
+      - "8000:8000"
+    volumes:
+      # Monte le code pour le rechargement à chaud
+      - ./backend/app:/app/app
+      # Monte aussi les modèles ML
+      - ./ml_models:/app/ml_models
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+  
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: file_rouge_frontend
+    image: file-rouge-frontend:latest
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    build:
+      context: ./ml_project
+      dockerfile: Dockerfile
+    container_name: mlops
+    environment:
+      MLFLOW_TRACKING_URI: ${MFLOW_BACKEND_STORE_URI}
+      MLFLOW_ARTIFACT_STORE_URI: ${MLFLOW_ARTIFACT_STORE_URI}
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlruns:/app/mlruns
+    depends_on:
+      - postgres
+    command: >
+      mlflow ui
+      --backend-store-uri MFLOW_BACKEND_STORE_URI
+      --default-artifact-root MLFLOW_ARTIFACT_STORE_URI
+      --host 0.0.0.0
+      --port 5000
+
+volumes:
+  postgres_data:

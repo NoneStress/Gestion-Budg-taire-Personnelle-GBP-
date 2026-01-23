@@ -1,12 +1,10 @@
 # app/services/ocr_service.py
 from PIL import Image
 import numpy as np
-import easyocr
 from io import BytesIO
 import re
 
 # Initialiser le reader OCR UNE SEULE FOIS (ne pas le faire à chaque appel)
-reader = easyocr.Reader(['fr', 'en'])
 
 def extract_text_from_image(image_bytes):
     """
@@ -18,6 +16,8 @@ def extract_text_from_image(image_bytes):
     Returns:
         str - Le texte extrait de l'image
     """
+    import easyocr
+    reader = easyocr.Reader(['fr', 'en'])
     try:
         # ✅ Convertir les bytes en image PIL
         # ❌ NE PAS faire: image_bytes.decode('utf-8')

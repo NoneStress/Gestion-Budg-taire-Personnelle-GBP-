@@ -1,0 +1,7 @@
+mlflow
+pandas
+scikit-learn
+numpy
+fastapi        
+uvicorn        
+psycopg2-binary

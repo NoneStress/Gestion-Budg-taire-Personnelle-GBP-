@@ -1,15 +1,18 @@
 from datetime import datetime, timedelta
 from typing import Optional
 import os
+from dotenv import load_dotenv
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from fastapi import HTTPException, status
 from app.schemas.user import TokenData
 
 # Configuration JWT
-SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key-here")  # À changer en prod
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+load_dotenv()  # Charge .env ou .env.local
+
+SECRET_KEY = os.getenv("SECRET_KEY", "fallback-key")
+ALGORITHM = os.getenv("ALGORITHM", "HS256")
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
 
 pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
@@ -44,3 +47,4 @@ def verify_token(token: str, credentials_exception):
     except JWTError:
         raise credentials_exception
 
+print("every thing's fine")

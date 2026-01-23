@@ -1,6 +1,5 @@
 from fastapi import APIRouter, UploadFile, HTTPException, File
 from app.services.ocr_service import extract_items, extract_text_from_image
-from app.utils.helpers import clean_receipt_lines
 from app.db.session import get_db
 from app.models.user import Ticket
 from sqlalchemy.orm import Session
@@ -88,7 +87,6 @@ async def process_and_store_ticket(
 
 
 
-# HTML CSS pour le frontend avec quelques outils de generation
 # Pytest pour quelques tests unitaire
 # Github action optionnel
 # DOCKER contenaire

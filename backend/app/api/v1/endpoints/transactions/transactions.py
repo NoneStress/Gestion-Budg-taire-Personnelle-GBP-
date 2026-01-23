@@ -17,8 +17,7 @@ from app.schemas.transaction_schema import (
     TransactionType
 )
 from app.services.ocr_service import extract_text_from_image, extract_items
-from app.utils.helpers import clean_receipt_lines
-from ..model_loader import model, vectorizer
+from ..model_loader import pipeline
 
 # Load the model and vectorizer for automatic classification
 # model_path = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..', 'ml_project', 'models', 'expense_categorizer_model.pkl')
@@ -76,8 +75,8 @@ def create_bulk_transactions(
         category = transaction_data.category
         if not category:
             try:
-                X = vectorizer.transform([transaction_data.description])
-                predicted_category = model.predict(X)[0]
+                predicted_category = pipeline.predict([transaction_data.description])
+                # predicted_category = model.predict(X)[0]
                 category = predicted_category
             except Exception as e:
                 category = "Autres"
@@ -128,8 +127,8 @@ def create_transaction(
     if not category:
         try:
             # Utiliser le modèle pour classifier la description
-            X = vectorizer.transform([transaction_data.description])
-            predicted_category = model.predict(X)[0]
+            predicted_category = pipeline.predict([transaction_data.description])
+            # predicted_category = model.predict(X)[0]
             category = predicted_category
         except Exception as e:
             # En cas d'erreur de classification, utiliser une catégorie par défaut
@@ -265,8 +264,8 @@ def update_transaction(
         if 'category' not in update_data or update_data.get('category') is None:
             try:
                 # Classifier automatiquement la nouvelle description
-                X = vectorizer.transform([update_data['description']])
-                predicted_category = model.predict(X)[0]
+                predicted_category = pipeline.predict([update_data['description']])
+                # predicted_category = model.predict(X)[0]
                 update_data['category'] = predicted_category
             except Exception as e:
                 print(f"Erreur lors de la reclassification automatique: {e}")
@@ -323,8 +322,8 @@ def reclassify_transaction(
 
     try:
         # Classifier automatiquement la description actuelle
-        X = vectorizer.transform([transaction.description])
-        predicted_category = model.predict(X)[0]
+        predicted_category = pipeline.predict([transaction.description])
+        # predicted_category = model.predict(X)[0]
         
         # Mettre à jour la catégorie
         transaction.category = predicted_category
@@ -395,8 +394,8 @@ def create_bulk_transactions(
         category = transaction_data.category
         if not category:
             try:
-                X = vectorizer.transform([transaction_data.description])
-                predicted_category = model.predict(X)[0]
+                predicted_category = pipeline.predict([transaction_data.description])
+                # predicted_category = model.predict(X)[0]
                 category = predicted_category
             except Exception as e:
                 category = "Autres"
